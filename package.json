@@ -1,0 +1,9 @@
+{
+  "name": "nihongo-trainer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Serverless deps for にほんご Trainer progress sync (Netlify Functions). The client app itself stays dependency-free.",
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  }
+}

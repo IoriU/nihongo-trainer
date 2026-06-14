@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>にほんご Trainer</title>
+  <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#0f1220">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -105,8 +106,19 @@
         <div class="statcard"><div class="num" id="stLearned">0</div><div class="lbl">Words seen</div></div>
         <div class="statcard"><div class="num" id="stMature">0</div><div class="lbl">Words mastered</div></div>
       </div>
+
+      <div class="sync">
+        <h3>Sync across devices</h3>
+        <p class="note">Enter the same passcode on each device to keep your streak &amp; cards in sync. Works only on the hosted site (not a local file).</p>
+        <div class="syncRow">
+          <input id="syncSecret" type="password" autocomplete="off" placeholder="sync passcode" />
+          <button id="syncNow" class="primary">Sync now</button>
+        </div>
+        <div id="syncStatus" class="note"></div>
+      </div>
+
       <button id="resetBtn" class="danger">Reset all progress</button>
-      <p class="note">Progress is saved in this browser only. Audio uses your browser's Japanese voice (Edge/Chrome work best).</p>
+      <p class="note">Local progress is saved in this browser. Audio uses your browser's Japanese voice (Edge/Chrome work best).</p>
     </section>
   </main>
 

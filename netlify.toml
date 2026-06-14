@@ -1,6 +1,10 @@
-# Static site — no build step. Serve the app subfolder as the site root.
+# Static site — no client build step. Serve the app subfolder as the site root.
 [build]
   publish = "japanese-course/app"
+
+# Serverless backend for cross-device progress sync (Netlify Blobs).
+[functions]
+  directory = "netlify/functions"
 
 # Long-cache static assets, but always revalidate the service worker and
 # the HTML so new lessons/code are picked up promptly.

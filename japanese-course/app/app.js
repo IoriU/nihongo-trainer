@@ -7,7 +7,7 @@ function load() {
   try { return JSON.parse(localStorage.getItem(STORE)) || {}; }
   catch (e) { return {}; }
 }
-function save() { localStorage.setItem(STORE, JSON.stringify(state)); }
+function save() { localStorage.setItem(STORE, JSON.stringify(state)); syncPushSoon(); }
 
 const state = Object.assign({
   cards: {},        // id -> { due, interval, ease, reps }
@@ -247,6 +247,7 @@ function grade(g) {
     m.ease = Math.min(3.0, m.ease + (g === 3 ? 0.15 : g === 1 ? -0.15 : 0));
   }
   m.due = g === 0 ? nowMs() + 60000 : nowMs() + m.interval * DAY;
+  m.mod = nowMs();   // last-modified stamp, used to merge across devices
   state.cards[key] = m;
   state.reviews++;
   touchStreak();
@@ -276,12 +277,117 @@ function renderStats() {
     keys.filter(k => state.cards[k].interval >= 7).length;
 }
 
-document.getElementById("resetBtn").addEventListener("click", () => {
-  if (confirm("Erase all progress in this browser?")) {
-    localStorage.removeItem(STORE);
-    location.reload();
+document.getElementById("resetBtn").addEventListener("click", async () => {
+  if (!confirm("Erase all progress in this browser?")) return;
+  const secret = getSecret();
+  if (syncAvailable() && secret) {
+    if (confirm("Also erase your synced backup on the server? (Otherwise it would restore on next load.)")) {
+      try {
+        await fetch(SYNC_ENDPOINT, {
+          method: "PUT",
+          headers: { "content-type": "application/json", "x-sync-secret": secret },
+          body: JSON.stringify({ cards: {}, kanaSeen: 0, kanaRight: 0, reviews: 0, lastDay: null, streak: 0 })
+        });
+      } catch (e) { /* best effort */ }
+    } else {
+      localStorage.removeItem(SECRET_KEY); // keep server data, but stop auto-restore here
+    }
   }
+  localStorage.removeItem(STORE);
+  location.reload();
 });
+
+// ================= SYNC (Netlify Blobs backend) =================
+const SYNC_ENDPOINT = "/.netlify/functions/progress";
+const SECRET_KEY = "nihongo_sync_secret";
+const syncEl = {
+  secret: document.getElementById("syncSecret"),
+  btn: document.getElementById("syncNow"),
+  status: document.getElementById("syncStatus")
+};
+
+// Sync only works over http(s) — under file:// the relative endpoint can't resolve.
+function syncAvailable() {
+  return location.protocol === "http:" || location.protocol === "https:";
+}
+function getSecret() {
+  return (syncEl.secret && syncEl.secret.value.trim()) || localStorage.getItem(SECRET_KEY) || "";
+}
+function setSyncStatus(msg) { if (syncEl.status) syncEl.status.textContent = msg; }
+function dateNum(s) {
+  const p = String(s).split("-").map(Number);
+  return p.length === 3 ? p[0] * 10000 + p[1] * 100 + p[2] : 0;
+}
+
+// Merge a remote state object into local `state` (in place). Heuristics:
+//  - cards: per key, keep the most-recently-modified record (m.mod)
+//  - counters/streak: take the max (monotonic — never lose progress)
+//  - lastDay: keep the later calendar date
+function mergeRemote(remote) {
+  if (!remote || typeof remote !== "object") return;
+  const rc = remote.cards || {};
+  Object.keys(rc).forEach(k => {
+    const a = state.cards[k], b = rc[k];
+    if (!a) { state.cards[k] = b; return; }
+    if ((b.mod || 0) > (a.mod || 0)) state.cards[k] = b;
+  });
+  state.kanaSeen  = Math.max(state.kanaSeen  || 0, remote.kanaSeen  || 0);
+  state.kanaRight = Math.max(state.kanaRight || 0, remote.kanaRight || 0);
+  state.reviews   = Math.max(state.reviews   || 0, remote.reviews   || 0);
+  state.streak    = Math.max(state.streak    || 0, remote.streak    || 0);
+  if (remote.lastDay && (!state.lastDay || dateNum(remote.lastDay) > dateNum(state.lastDay))) {
+    state.lastDay = remote.lastDay;
+  }
+}
+
+// Manual full sync: pull remote, merge, push merged back.
+async function pullMergePush() {
+  if (!syncAvailable()) { setSyncStatus("Open the hosted (netlify.app) URL to sync — not a local file."); return; }
+  const secret = getSecret();
+  if (!secret) { setSyncStatus("Enter a passcode first."); return; }
+  setSyncStatus("Syncing…");
+  try {
+    const res = await fetch(SYNC_ENDPOINT, { headers: { "x-sync-secret": secret } });
+    if (res.status === 401) { setSyncStatus("Wrong passcode, or sync isn't set up on the server yet."); return; }
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const payload = await res.json();
+    mergeRemote(payload.data);
+    save(); // persist merged locally (also schedules a push, but we push now anyway)
+    const put = await fetch(SYNC_ENDPOINT, {
+      method: "PUT",
+      headers: { "content-type": "application/json", "x-sync-secret": secret },
+      body: JSON.stringify(state)
+    });
+    if (!put.ok) throw new Error("HTTP " + put.status);
+    localStorage.setItem(SECRET_KEY, secret);
+    setSyncStatus("✓ Synced " + new Date().toLocaleTimeString());
+    renderStats();
+    startDeck();
+  } catch (e) {
+    setSyncStatus("Sync failed: " + (e && e.message || e));
+  }
+}
+
+// Debounced background push after local changes (called from save()).
+let pushTimer = null;
+function syncPushSoon() {
+  if (!syncAvailable() || !getSecret()) return;
+  clearTimeout(pushTimer);
+  pushTimer = setTimeout(() => {
+    const secret = getSecret();
+    fetch(SYNC_ENDPOINT, {
+      method: "PUT",
+      headers: { "content-type": "application/json", "x-sync-secret": secret },
+      body: JSON.stringify(state)
+    }).then(r => { if (r.ok) setSyncStatus("✓ Auto-synced " + new Date().toLocaleTimeString()); })
+      .catch(() => { /* offline — localStorage keeps the data; next sync will push */ });
+  }, 4000);
+}
+
+if (syncEl.secret) syncEl.secret.value = localStorage.getItem(SECRET_KEY) || "";
+if (syncEl.btn) syncEl.btn.addEventListener("click", pullMergePush);
+// On load: if a passcode is already saved and we're on the hosted site, pull+merge.
+if (syncAvailable() && localStorage.getItem(SECRET_KEY)) pullMergePush();
 
 // init
 startDeck();

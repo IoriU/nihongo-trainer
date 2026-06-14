@@ -212,6 +212,28 @@ button.danger {
 }
 .note { color: var(--muted); font-size: .8rem; margin-top: 14px; }
 
+/* Sync */
+.sync {
+  background: var(--panel);
+  border: 1px solid #33405f;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 22px;
+}
+.sync h3 { margin: 0 0 4px; font-size: 1rem; }
+.syncRow { display: flex; gap: 8px; margin-top: 10px; }
+.syncRow input {
+  flex: 1;
+  background: var(--card);
+  color: var(--text);
+  border: 1px solid #33405f;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 1rem;
+}
+.syncRow input:focus { outline: none; border-color: var(--accent2); }
+#syncStatus { min-height: 18px; }
+
 @media (max-width: 480px) {
   .statgrid { grid-template-columns: 1fr 1fr; }
   .bigKana { font-size: 5rem; }
