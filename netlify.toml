@@ -1,0 +1,15 @@
+# Static site — no build step. Serve the app subfolder as the site root.
+[build]
+  publish = "japanese-course/app"
+
+# Long-cache static assets, but always revalidate the service worker and
+# the HTML so new lessons/code are picked up promptly.
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "no-cache"

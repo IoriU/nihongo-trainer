@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#0f1220"/>
+  <text x="256" y="300" text-anchor="middle"
+        font-family="'Yu Gothic UI','Meiryo','Noto Sans CJK JP',sans-serif"
+        font-size="240" font-weight="700" fill="#ff5a76">に</text>
+  <rect x="156" y="356" width="200" height="14" rx="7" fill="#4fd1c5"/>
+</svg>

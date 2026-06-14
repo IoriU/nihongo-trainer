@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>にほんご Trainer</title>
+  <meta name="theme-color" content="#0f1220">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="にほんご">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>にほんご <span>Trainer</span></h1>
+    <nav id="tabs">
+      <button class="tab active" data-tab="kana">Kana</button>
+      <button class="tab" data-tab="cards">Flashcards</button>
+      <button class="tab" data-tab="stats">Stats</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- KANA TRAINER -->
+    <section id="kana" class="panel active">
+      <div class="controls">
+        <label>Script:
+          <select id="kanaScript">
+            <option value="katakana" selected>Katakana (カ)</option>
+            <option value="hiragana">Hiragana (か)</option>
+            <option value="both">Both</option>
+          </select>
+        </label>
+        <label>Set:
+          <select id="kanaSet">
+            <option value="basic" selected>Basic</option>
+            <option value="dakuten">Dakuten (が ば ぱ)</option>
+            <option value="combo">Combos (きゃ しゅ)</option>
+            <option value="all">All</option>
+          </select>
+        </label>
+        <label>Mode:
+          <select id="kanaMode">
+            <option value="type" selected>Type romaji</option>
+            <option value="choice">Multiple choice</option>
+          </select>
+        </label>
+        <button id="kanaStart" class="primary">Start</button>
+      </div>
+
+      <div id="kanaGame" class="hidden">
+        <div class="bigKana" id="kanaPrompt">ア</div>
+        <button class="audioBtn" id="kanaAudio" title="Play sound">🔊</button>
+        <div id="kanaTypeWrap">
+          <input id="kanaInput" autocomplete="off" placeholder="type romaji…" />
+        </div>
+        <div id="kanaChoices" class="choices hidden"></div>
+        <div class="scoreline">
+          <span id="kanaScore">Score: 0/0</span>
+          <span id="kanaStreak">Streak: 0 🔥</span>
+        </div>
+        <div id="kanaFeedback" class="feedback"></div>
+      </div>
+    </section>
+
+    <!-- FLASHCARDS -->
+    <section id="cards" class="panel">
+      <div class="controls">
+        <label>Deck:
+          <select id="deckSelect"></select>
+        </label>
+        <span id="dueInfo" class="due"></span>
+      </div>
+
+      <div id="cardArea">
+        <div class="flashcard" id="flashcard">
+          <div class="front" id="cardFront">—</div>
+          <div class="back hidden" id="cardBack"></div>
+        </div>
+        <button class="audioBtn big" id="cardAudio" title="Play sound">🔊</button>
+        <div id="cardButtons">
+          <button id="showAnswer" class="primary">Show answer</button>
+          <div id="grades" class="hidden">
+            <button class="grade again" data-g="0">Again</button>
+            <button class="grade hard" data-g="1">Hard</button>
+            <button class="grade good" data-g="2">Good</button>
+            <button class="grade easy" data-g="3">Easy</button>
+          </div>
+        </div>
+        <div id="cardDone" class="feedback hidden">🎉 All caught up for this deck today!</div>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <section id="stats" class="panel">
+      <div class="statgrid">
+        <div class="statcard"><div class="num" id="stStreak">0</div><div class="lbl">Day streak 🔥</div></div>
+        <div class="statcard"><div class="num" id="stReviews">0</div><div class="lbl">Total reviews</div></div>
+        <div class="statcard"><div class="num" id="stAccuracy">–</div><div class="lbl">Kana accuracy</div></div>
+        <div class="statcard"><div class="num" id="stDue">0</div><div class="lbl">Cards due now</div></div>
+        <div class="statcard"><div class="num" id="stLearned">0</div><div class="lbl">Words seen</div></div>
+        <div class="statcard"><div class="num" id="stMature">0</div><div class="lbl">Words mastered</div></div>
+      </div>
+      <button id="resetBtn" class="danger">Reset all progress</button>
+      <p class="note">Progress is saved in this browser only. Audio uses your browser's Japanese voice (Edge/Chrome work best).</p>
+    </section>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    // Register the service worker for offline use. Only runs over http(s);
+    // under file:// navigator.serviceWorker is unavailable, so this no-ops.
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('sw.js').catch(function () {});
+      });
+    }
+  </script>
+</body>
+</html>
