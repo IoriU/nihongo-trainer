@@ -1,7 +1,7 @@
 // にほんご Trainer service worker — offline cache (stale-while-revalidate).
 // Bump CACHE when you want to force-evict old assets. Normal updates are
 // picked up automatically on the next load (revalidate-in-background below).
-const CACHE = 'nihongo-trainer-v1';
+const CACHE = 'nihongo-trainer-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -9,7 +9,8 @@ const ASSETS = [
   './data.js',
   './app.js',
   './manifest.json',
-  './icon.svg'
+  './icon.svg',
+  './lessons/L01.md'
 ];
 
 self.addEventListener('install', (e) => {

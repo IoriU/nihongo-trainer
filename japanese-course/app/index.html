@@ -19,15 +19,26 @@
   <header>
     <h1>にほんご <span>Trainer</span></h1>
     <nav id="tabs">
-      <button class="tab active" data-tab="kana">Kana</button>
+      <button class="tab active" data-tab="learn">Learn</button>
+      <button class="tab" data-tab="kana">Kana</button>
       <button class="tab" data-tab="cards">Flashcards</button>
       <button class="tab" data-tab="stats">Stats</button>
     </nav>
   </header>
 
   <main>
+    <!-- LEARN (lesson reading) -->
+    <section id="learn" class="panel active">
+      <div class="controls">
+        <label>Lesson:
+          <select id="lessonSelect"></select>
+        </label>
+      </div>
+      <article id="lessonContent" class="reading"></article>
+    </section>
+
     <!-- KANA TRAINER -->
-    <section id="kana" class="panel active">
+    <section id="kana" class="panel">
       <div class="controls">
         <label>Script:
           <select id="kanaScript">

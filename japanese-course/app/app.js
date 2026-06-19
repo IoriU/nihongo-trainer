@@ -62,6 +62,7 @@ document.querySelectorAll(".tab").forEach(btn => {
     document.getElementById(btn.dataset.tab).classList.add("active");
     if (btn.dataset.tab === "stats") renderStats();
     if (btn.dataset.tab === "cards") startDeck();
+    if (btn.dataset.tab === "learn") showLesson();
   });
 });
 
@@ -389,5 +390,96 @@ if (syncEl.btn) syncEl.btn.addEventListener("click", pullMergePush);
 // On load: if a passcode is already saved and we're on the hosted site, pull+merge.
 if (syncAvailable() && localStorage.getItem(SECRET_KEY)) pullMergePush();
 
+// ================= LEARN (lesson reading) =================
+const lessonSel = document.getElementById("lessonSelect");
+const lessonBox = document.getElementById("lessonContent");
+
+// Populate the lesson dropdown from the shared LESSONS list (single source
+// of truth for which lessons exist). Each lesson's prose lives at
+// lessons/<id>.md and is fetched + rendered on demand.
+LESSONS.forEach(l => {
+  const o = document.createElement("option");
+  o.value = l.id; o.textContent = l.title;
+  lessonSel.appendChild(o);
+});
+lessonSel.addEventListener("change", showLesson);
+
+// Minimal, safe Markdown -> HTML (headings, bold/italic/code, lists,
+// checkboxes, tables, blockquotes, code fences, hr). All text is HTML-escaped.
+function mdToHtml(md) {
+  const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const inline = s => esc(s)
+    .replace(/`([^`]+)`/g, (m, c) => "<code>" + c + "</code>")
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/\*([^*]+)\*/g, "<em>$1</em>");
+  const lines = md.replace(/\r\n/g, "\n").split("\n");
+  const N = lines.length;
+  let html = "", i = 0;
+  const isBreak = l => /^(#{1,6}\s|>|\s*[-*]\s|\s*\d+\.\s|```|-{3,}\s*$)/.test(l);
+  while (i < N) {
+    const line = lines[i];
+    if (/^```/.test(line)) {                                  // fenced code
+      const buf = []; i++;
+      while (i < N && !/^```/.test(lines[i])) buf.push(lines[i++]);
+      i++;
+      html += "<pre><code>" + esc(buf.join("\n")) + "</code></pre>"; continue;
+    }
+    if (/^(-{3,}|\*{3,})\s*$/.test(line)) { html += "<hr>"; i++; continue; }
+    const h = line.match(/^(#{1,6})\s+(.*)$/);
+    if (h) { const n = h[1].length; html += "<h" + n + ">" + inline(h[2]) + "</h" + n + ">"; i++; continue; }
+    if (/\|/.test(line) && i + 1 < N && /-/.test(lines[i + 1]) &&
+        /^\s*\|?[\s:|-]*\|[\s:|-]*$/.test(lines[i + 1])) {     // table
+      const row = r => r.replace(/^\s*\|/, "").replace(/\|\s*$/, "").split("|").map(c => c.trim());
+      const head = row(line); i += 2;
+      let t = "<table><thead><tr>" + head.map(c => "<th>" + inline(c) + "</th>").join("") + "</tr></thead><tbody>";
+      while (i < N && /\|/.test(lines[i]) && lines[i].trim() !== "") {
+        t += "<tr>" + row(lines[i]).map(c => "<td>" + inline(c) + "</td>").join("") + "</tr>"; i++;
+      }
+      html += t + "</tbody></table>"; continue;
+    }
+    if (/^>\s?/.test(line)) {                                  // blockquote
+      const buf = [];
+      while (i < N && /^>\s?/.test(lines[i])) buf.push(lines[i++].replace(/^>\s?/, ""));
+      html += "<blockquote>" + buf.map(inline).join("<br>") + "</blockquote>"; continue;
+    }
+    if (/^\s*[-*]\s+/.test(line)) {                            // unordered / checkbox
+      const items = [];
+      while (i < N && /^\s*[-*]\s+/.test(lines[i])) {
+        const raw = lines[i++].replace(/^\s*[-*]\s+/, "");
+        const cb = raw.match(/^\[([ xX])\]\s+(.*)$/);
+        items.push(cb
+          ? '<input type="checkbox" disabled' + (cb[1].toLowerCase() === "x" ? " checked" : "") + "> " + inline(cb[2])
+          : inline(raw));
+      }
+      html += "<ul>" + items.map(x => "<li>" + x + "</li>").join("") + "</ul>"; continue;
+    }
+    if (/^\s*\d+\.\s+/.test(line)) {                           // ordered
+      const items = [];
+      while (i < N && /^\s*\d+\.\s+/.test(lines[i])) items.push(inline(lines[i++].replace(/^\s*\d+\.\s+/, "")));
+      html += "<ol>" + items.map(x => "<li>" + x + "</li>").join("") + "</ol>"; continue;
+    }
+    if (line.trim() === "") { i++; continue; }                 // blank
+    const buf = [];                                            // paragraph
+    while (i < N && lines[i].trim() !== "" && !isBreak(lines[i])) buf.push(lines[i++]);
+    html += "<p>" + buf.map(inline).join("<br>") + "</p>";
+  }
+  return html;
+}
+
+function showLesson() {
+  const id = lessonSel.value || (LESSONS[0] && LESSONS[0].id);
+  if (!id) return;
+  if (!syncAvailable()) {
+    lessonBox.innerHTML = '<p class="note">📖 Lesson reading opens on the hosted site. Open your <strong>netlify.app</strong> URL (the installed app) to read here — local-file mode can\'t load lesson files.</p>';
+    return;
+  }
+  lessonBox.innerHTML = '<p class="note">Loading…</p>';
+  fetch("lessons/" + id + ".md")
+    .then(r => { if (!r.ok) throw new Error("missing"); return r.text(); })
+    .then(md => { lessonBox.innerHTML = mdToHtml(md); lessonBox.scrollTop = 0; })
+    .catch(() => { lessonBox.innerHTML = '<p class="note">No reading is available for this lesson yet.</p>'; });
+}
+
 // init
 startDeck();
+showLesson();   // Learn is the default tab

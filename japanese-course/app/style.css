@@ -234,6 +234,65 @@ button.danger {
 .syncRow input:focus { outline: none; border-color: var(--accent2); }
 #syncStatus { min-height: 18px; }
 
+/* Learn — lesson reading */
+.reading {
+  display: block;
+  background: var(--panel);
+  border: 1px solid #2a3454;
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin-top: 12px;
+  line-height: 1.65;
+  overflow-x: auto;
+}
+.reading h1 { font-size: 1.5rem; margin: 0 0 12px; }
+.reading h2 { font-size: 1.2rem; margin: 22px 0 8px; color: var(--accent2); }
+.reading h3 { font-size: 1.05rem; margin: 18px 0 6px; }
+.reading p { margin: 10px 0; }
+.reading strong { color: var(--text); }
+.reading em { color: var(--muted); font-style: italic; }
+.reading a { color: var(--accent2); }
+.reading hr { border: none; border-top: 1px solid #2a3454; margin: 18px 0; }
+.reading ul, .reading ol { margin: 10px 0; padding-left: 22px; }
+.reading li { margin: 4px 0; }
+.reading input[type="checkbox"] { margin-right: 6px; }
+.reading code {
+  background: #11162a;
+  border: 1px solid #2a3454;
+  border-radius: 5px;
+  padding: 1px 5px;
+  font-size: .9em;
+}
+.reading pre {
+  background: #11162a;
+  border: 1px solid #2a3454;
+  border-radius: 10px;
+  padding: 12px 14px;
+  overflow-x: auto;
+}
+.reading pre code { background: none; border: none; padding: 0; white-space: pre; }
+.reading blockquote {
+  margin: 12px 0;
+  padding: 8px 14px;
+  border-left: 3px solid var(--accent);
+  background: #161b30;
+  border-radius: 0 8px 8px 0;
+  color: var(--muted);
+}
+.reading table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-size: .92rem;
+}
+.reading th, .reading td {
+  border: 1px solid #2a3454;
+  padding: 7px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+.reading thead th { background: var(--card); color: var(--accent2); }
+
 @media (max-width: 480px) {
   .statgrid { grid-template-columns: 1fr 1fr; }
   .bigKana { font-size: 5rem; }
