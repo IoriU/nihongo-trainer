@@ -23,12 +23,13 @@ Each lesson has the same shape so it feels familiar:
 
 ## 🎮 Practice app
 
-Open **[app/index.html](app/index.html)** in Edge or Chrome (just double-click it) for an interactive trainer:
+Open **[app/index.html](app/index.html)** in Edge or Chrome (or the hosted PWA) for an interactive trainer:
+- **Learn** — read each lesson right inside the app (the `app/lessons/*.md` files)
 - **Kana** — katakana/hiragana drills (type or multiple-choice) with audio
 - **Flashcards** — spaced-repetition review, auto-loaded with each lesson's vocab
-- **Stats** — streak, accuracy, and cards due
+- **Stats** — streak, accuracy, cards due, and cross-device sync
 
-Progress saves automatically in your browser. No install or internet needed.
+Progress saves in your browser (and syncs across devices on the hosted site).
 
 ## 🗺️ The plan
 
@@ -36,10 +37,20 @@ Progress saves automatically in your browser. No install or internet needed.
 
 ## 📚 Table of Contents
 
+Lessons are read **in the app's Learn tab**; the source files are linked below.
+
+**✅ Module 1 — Survival Basics (complete)**
+
 | # | Lesson | Syllabus topic | Status |
 |---|--------|----------------|--------|
-| 01 | [Greetings & Self-Introduction](lesson-01-greetings-and-self-introduction.md) | 1.1 | ✅ Ready |
-| 02 | This / that — naming things (これ・それ・あれ) | 1.2 | 🔒 ask when ready |
+| 01 | [Greetings & Self-Introduction](app/lessons/L01.md) | 1.1 | ✅ |
+| 02 | [これ・それ・あれ — this / that](app/lessons/L02.md) | 1.2 | ✅ |
+| 03 | [Numbers & Prices 🏯](app/lessons/L03.md) | 1.3 | ✅ |
+| 04 | [Time & Dates 🏯](app/lessons/L04.md) | 1.4 | ✅ |
+| 05 | [Existence: あります・います 🏯](app/lessons/L05.md) | 1.5 | ✅ |
+| 06 | [Asking Where Things Are 🏯](app/lessons/L06.md) | 1.6 | ✅ |
+
+**🔒 Module 2 — Verbs & Daily Actions** — say *"ready for Module 2"* when you want it.
 
 *(The course grows as you progress — the [syllabus](syllabus.md) decides what comes next.)*
 

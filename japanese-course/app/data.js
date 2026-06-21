@@ -71,10 +71,13 @@ KANA.hiragana.combo = {
   "ぴゃ":"pya","ぴゅ":"pyu","ぴょ":"pyo"
 };
 
-// Lessons: each card = { jp, romaji, id (Indonesian), note }
+// Lessons: { id, module, title, cards:[{ jp, romaji, id (Indonesian), note }] }
+// `module` groups lessons in the app's dropdowns (use the syllabus module name,
+// e.g. "Module 1 — Survival Basics"). Lessons without it fall under "Lessons".
 const LESSONS = [
   {
     id: "L01",
+    module: "Module 1 — Survival Basics",
     title: "Lesson 01 — Greetings & Self-Introduction",
     cards: [
       { jp:"おはようございます", romaji:"ohayō gozaimasu", id:"selamat pagi (sopan)" },
@@ -93,6 +96,116 @@ const LESSONS = [
       { jp:"なまえ", romaji:"namae", id:"nama" },
       { jp:"です", romaji:"desu", id:"adalah (sopan)" },
       { jp:"さん", romaji:"san", id:"Pak / Bu / Mas / Mbak" }
+    ]
+  },
+  {
+    id: "L02",
+    module: "Module 1 — Survival Basics",
+    title: "Lesson 02 — これ・それ・あれ (this/that)",
+    cards: [
+      { jp:"これ", romaji:"kore", id:"ini (dekat saya)" },
+      { jp:"それ", romaji:"sore", id:"itu (dekat lawan bicara)" },
+      { jp:"あれ", romaji:"are", id:"itu (jauh dari keduanya)" },
+      { jp:"どれ", romaji:"dore", id:"yang mana" },
+      { jp:"この", romaji:"kono", id:"... ini (+ kata benda)" },
+      { jp:"その", romaji:"sono", id:"... itu (+ kata benda)" },
+      { jp:"あの", romaji:"ano", id:"... itu (jauh) (+ kata benda)" },
+      { jp:"なん", romaji:"nan / nani", id:"apa" },
+      { jp:"ほん", romaji:"hon", id:"buku" },
+      { jp:"ペン", romaji:"pen", id:"pulpen" },
+      { jp:"かばん", romaji:"kaban", id:"tas" },
+      { jp:"けいたい", romaji:"keitai", id:"HP / ponsel" },
+      { jp:"くるま", romaji:"kuruma", id:"mobil" },
+      { jp:"なまえ", romaji:"namae", id:"nama", note:"ulang dari L01" }
+    ]
+  },
+  {
+    id: "L03",
+    module: "Module 1 — Survival Basics",
+    title: "Lesson 03 — Numbers & Prices (すうじ・ねだん)",
+    cards: [
+      { jp:"いち", romaji:"ichi", id:"1" },
+      { jp:"に", romaji:"ni", id:"2" },
+      { jp:"さん", romaji:"san", id:"3" },
+      { jp:"よん", romaji:"yon / shi", id:"4" },
+      { jp:"ご", romaji:"go", id:"5" },
+      { jp:"ろく", romaji:"roku", id:"6" },
+      { jp:"なな", romaji:"nana / shichi", id:"7" },
+      { jp:"はち", romaji:"hachi", id:"8" },
+      { jp:"きゅう", romaji:"kyū / ku", id:"9" },
+      { jp:"じゅう", romaji:"jū", id:"10" },
+      { jp:"ひゃく", romaji:"hyaku", id:"100 (ratus)" },
+      { jp:"せん", romaji:"sen", id:"1000 (ribu)" },
+      { jp:"まん", romaji:"man", id:"10.000 (puluh ribu)" },
+      { jp:"えん", romaji:"en", id:"yen (mata uang)" },
+      { jp:"いくら", romaji:"ikura", id:"berapa harganya" },
+      { jp:"ください", romaji:"kudasai", id:"tolong (minta sesuatu)" }
+    ]
+  },
+  {
+    id: "L04",
+    module: "Module 1 — Survival Basics",
+    title: "Lesson 04 — Time & Dates (じかん・ひにち)",
+    cards: [
+      { jp:"いま", romaji:"ima", id:"sekarang" },
+      { jp:"じ", romaji:"~ji", id:"jam (pukul)", note:"contoh: さんじ = jam 3" },
+      { jp:"ふん", romaji:"~fun / pun", id:"menit" },
+      { jp:"はん", romaji:"han", id:"setengah (lewat 30)" },
+      { jp:"ごぜん", romaji:"gozen", id:"pagi / AM" },
+      { jp:"ごご", romaji:"gogo", id:"siang-sore / PM" },
+      { jp:"なんじ", romaji:"nanji", id:"jam berapa" },
+      { jp:"きょう", romaji:"kyō", id:"hari ini" },
+      { jp:"あした", romaji:"ashita", id:"besok" },
+      { jp:"きのう", romaji:"kinō", id:"kemarin" },
+      { jp:"げつようび", romaji:"getsuyōbi", id:"Senin" },
+      { jp:"かようび", romaji:"kayōbi", id:"Selasa" },
+      { jp:"すいようび", romaji:"suiyōbi", id:"Rabu" },
+      { jp:"もくようび", romaji:"mokuyōbi", id:"Kamis" },
+      { jp:"きんようび", romaji:"kinyōbi", id:"Jumat" },
+      { jp:"どようび", romaji:"doyōbi", id:"Sabtu" },
+      { jp:"にちようび", romaji:"nichiyōbi", id:"Minggu" }
+    ]
+  },
+  {
+    id: "L05",
+    module: "Module 1 — Survival Basics",
+    title: "Lesson 05 — Existence: あります・います",
+    cards: [
+      { jp:"あります", romaji:"arimasu", id:"ada (benda mati)" },
+      { jp:"います", romaji:"imasu", id:"ada (benda hidup: orang/hewan)" },
+      { jp:"うえ", romaji:"ue", id:"atas" },
+      { jp:"した", romaji:"shita", id:"bawah" },
+      { jp:"なか", romaji:"naka", id:"dalam" },
+      { jp:"まえ", romaji:"mae", id:"depan" },
+      { jp:"うしろ", romaji:"ushiro", id:"belakang" },
+      { jp:"となり", romaji:"tonari", id:"sebelah (sejenis)" },
+      { jp:"みぎ", romaji:"migi", id:"kanan" },
+      { jp:"ひだり", romaji:"hidari", id:"kiri" },
+      { jp:"つくえ", romaji:"tsukue", id:"meja" },
+      { jp:"いす", romaji:"isu", id:"kursi" },
+      { jp:"ねこ", romaji:"neko", id:"kucing" },
+      { jp:"いぬ", romaji:"inu", id:"anjing" },
+      { jp:"へや", romaji:"heya", id:"kamar / ruangan" }
+    ]
+  },
+  {
+    id: "L06",
+    module: "Module 1 — Survival Basics",
+    title: "Lesson 06 — Asking Where Things Are (どこ)",
+    cards: [
+      { jp:"どこ", romaji:"doko", id:"di mana" },
+      { jp:"どちら", romaji:"dochira", id:"di mana / arah mana (sopan)" },
+      { jp:"ここ", romaji:"koko", id:"di sini" },
+      { jp:"そこ", romaji:"soko", id:"di situ" },
+      { jp:"あそこ", romaji:"asoko", id:"di sana" },
+      { jp:"えき", romaji:"eki", id:"stasiun" },
+      { jp:"トイレ", romaji:"toire", id:"toilet" },
+      { jp:"みせ", romaji:"mise", id:"toko" },
+      { jp:"コンビニ", romaji:"konbini", id:"minimarket" },
+      { jp:"ぎんこう", romaji:"ginkō", id:"bank" },
+      { jp:"びょういん", romaji:"byōin", id:"rumah sakit" },
+      { jp:"でぐち", romaji:"deguchi", id:"pintu keluar (出口)" },
+      { jp:"いりぐち", romaji:"iriguchi", id:"pintu masuk (入口)" }
     ]
   }
 ];

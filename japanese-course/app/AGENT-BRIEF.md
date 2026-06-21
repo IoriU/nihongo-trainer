@@ -51,6 +51,7 @@ const KANA = {
 const LESSONS = [
   {
     id: "L01",                       // unique, stable — used as SRS storage key prefix
+    module: "Module 1 — Survival Basics",  // groups lessons in the dropdowns (syllabus module name)
     title: "Lesson 01 — ...",
     cards: [
       { jp:"...", romaji:"...", id:"<Indonesian meaning>", note:"<optional>" }
@@ -59,6 +60,7 @@ const LESSONS = [
 ];
 ```
 
+- **`module`** is the syllabus module name (e.g. `"Module 1 — Survival Basics"`). The app groups the Learn + Flashcards dropdowns into `<optgroup>`s by it, ordered by the module number. Omitting it dumps the lesson into a catch-all "Lessons" group — so always set it.
 - **`card.id` is the Indonesian meaning** (the user's native language) — keep glosses in Indonesian.
 - SRS state is keyed by `"<lesson.id>#<cardIndex>"`. ⚠️ **Never reorder or delete cards within an existing lesson**, or you'll corrupt the user's review history. Only append new cards/lessons.
 - SRS card records carry an extra `mod` (last-modified ms) field used to merge progress across devices. Don't strip it.

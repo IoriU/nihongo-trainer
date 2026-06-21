@@ -174,12 +174,34 @@ const cEl = {
 };
 let queue = [], curCard = null;
 
-// populate deck dropdown
-LESSONS.forEach(l => {
-  const o = document.createElement("option");
-  o.value = l.id; o.textContent = l.title;
-  cEl.deck.appendChild(o);
-});
+// Fill a <select> with lessons grouped into <optgroup> by module, modules
+// ordered by their number ("Module 1" < "Module 2"); lessons without a
+// module fall under a "Lessons" group shown last.
+function fillLessonSelect(sel) {
+  const prev = sel.value;
+  sel.innerHTML = "";
+  const groups = new Map();
+  LESSONS.forEach(l => {
+    const m = l.module || "Lessons";
+    if (!groups.has(m)) groups.set(m, []);
+    groups.get(m).push(l);
+  });
+  const modNum = s => Number((s.match(/\d+/) || [Infinity])[0]);
+  [...groups.keys()].sort((a, b) => modNum(a) - modNum(b)).forEach(label => {
+    const og = document.createElement("optgroup");
+    og.label = label;
+    groups.get(label).forEach(l => {
+      const o = document.createElement("option");
+      o.value = l.id; o.textContent = l.title;
+      og.appendChild(o);
+    });
+    sel.appendChild(og);
+  });
+  if (prev) sel.value = prev;
+}
+
+// populate deck dropdown (grouped by module)
+fillLessonSelect(cEl.deck);
 cEl.deck.addEventListener("change", startDeck);
 
 function cardKey(lid, i) { return lid + "#" + i; }
@@ -395,13 +417,9 @@ const lessonSel = document.getElementById("lessonSelect");
 const lessonBox = document.getElementById("lessonContent");
 
 // Populate the lesson dropdown from the shared LESSONS list (single source
-// of truth for which lessons exist). Each lesson's prose lives at
-// lessons/<id>.md and is fetched + rendered on demand.
-LESSONS.forEach(l => {
-  const o = document.createElement("option");
-  o.value = l.id; o.textContent = l.title;
-  lessonSel.appendChild(o);
-});
+// of truth for which lessons exist), grouped by module. Each lesson's prose
+// lives at lessons/<id>.md and is fetched + rendered on demand.
+fillLessonSelect(lessonSel);
 lessonSel.addEventListener("change", showLesson);
 
 // Minimal, safe Markdown -> HTML (headings, bold/italic/code, lists,

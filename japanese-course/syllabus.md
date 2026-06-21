@@ -24,11 +24,11 @@ This is the **guideline** for every lesson. Each lesson we write maps to one row
 | # | Lesson topic | Key grammar | Status |
 |---|--------------|-------------|--------|
 | 1.1 | **Greetings & self-introduction** | Aは Bです · か · の · さん | ✅ Lesson 01 |
-| 1.2 | **This / that — naming things** | これ・それ・あれ · この/その/あの | 🔒 |
-| 1.3 | **Numbers, prices, counting** 🏯 | 0–9999, 円, 〜まい/〜こ/〜ひき counters | 🔒 |
-| 1.4 | **Time & dates** 🏯 | 〜じ〜ふん, days, 〜ようび, calendar | 🔒 |
-| 1.5 | **Existence: あります / います** 🏯 | location words (うえ/した/なか…) · に | 🔒 |
-| 1.6 | **Asking where things are** 🏯 | どこ・どちら · station/shop directions | 🔒 |
+| 1.2 | **This / that — naming things** | これ・それ・あれ · この/その/あの | ✅ Lesson 02 |
+| 1.3 | **Numbers, prices, counting** 🏯 | 0–9999, 円, いくら, を ください | ✅ Lesson 03 |
+| 1.4 | **Time & dates** 🏯 | 〜じ〜ふん, days, 〜ようび, calendar | ✅ Lesson 04 |
+| 1.5 | **Existence: あります / います** 🏯 | location words (うえ/した/なか…) · に · が | ✅ Lesson 05 |
+| 1.6 | **Asking where things are** 🏯 | どこ・どちら · ここ/そこ/あそこ · directions | ✅ Lesson 06 |
 
 ---
 
@@ -124,4 +124,4 @@ This is the **guideline** for every lesson. Each lesson we write maps to one row
 3. You can always say *"let's do 3.2 next"* to jump to a practical topic, or just *"ready for the next lesson"* to follow the order.
 4. We can re-order anytime — e.g. pull a 🏯 survival topic forward if you're moving to Japan soon.
 
-**Current position:** ✅ 1.1 done → next in sequence is **1.2 これ・それ・あれ**.
+**Current position:** ✅ Module 1 complete (1.1–1.6) → next in sequence is **Module 2 (2.1 ます-form verbs)**.
